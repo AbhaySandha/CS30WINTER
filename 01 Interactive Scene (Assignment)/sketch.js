@@ -13,8 +13,10 @@ function setup() {
 
 function draw() {
   background(51,153,200);
+  bubble();
 }
 
 function bubble(){
-  circle(random(0,windowheight))
+  fill(100,100,100);
+  circle(random(0,windowHeight),random(windowWidth,0), random(0,5));
 }
