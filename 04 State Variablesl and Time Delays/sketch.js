@@ -25,7 +25,7 @@ function draw() {
   background(220);
   drawShape();
   manageTimer();
-  if (shapeState===4 && elapsedTime>2000){
+  if (shapeState === 4 && elapsedTime > 2000) {
     shapeState = 1;
   }
 }
