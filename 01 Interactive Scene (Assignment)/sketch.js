@@ -43,6 +43,7 @@ function setup() {
 }
 
 function draw() {
+  //chalalnage
   //---------Background----------\\
   switch (currentBack) {
   case 0:
@@ -58,7 +59,7 @@ function draw() {
     background(213, 197, 138); // Khaki
     break;
   }
-
+//chalange
   //-----Text-----\\
   fill(0);
   textSize(20);
@@ -106,7 +107,7 @@ function draw() {
 
 }
 
-
+//chalange
 // backgroudn key change
 function keyPressed() {
   if (key === " ") {
@@ -119,11 +120,9 @@ function keyPressed() {
 //---------Bubble---------\\
 
 function bubble(rate) {
-
-
   let bubbleSize = 0;
   let numBubbles = random(5, 30);
-  fill(255, 0, 0);
+  fill(255);
 
   
   for (let bubbles = 0; bubbles <= numBubbles * rate; bubbles++) {
@@ -156,5 +155,3 @@ function fish(fishX, fishY, fishSize) {
   ellipse(fishX + fishSize * 0.55, fishY - fishSize * 0.2, fishSize * 0.1, fishSize * 0.1);
 
 }
-
-
