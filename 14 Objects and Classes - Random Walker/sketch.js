@@ -5,7 +5,7 @@
 
 let singleWalker;
 let walkers = [];
-const NUM_WALKERS = 10000;
+const NUM_WALKERS = 5000;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
