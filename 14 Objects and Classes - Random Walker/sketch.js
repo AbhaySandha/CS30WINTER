@@ -58,7 +58,7 @@ class Walker {
   }
 
   //2. Class Methods
-  display() {  // render teh waler on screen
+  display() {  // render the walker on screen
     rectMode(CENTER);
     fill(this.c);
     square(this.x, this.y, this.size);
