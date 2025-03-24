@@ -4,16 +4,19 @@
 
 let myCar = [];
 let vehicles = [];
+let carAmount;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+  carAmount = int(random(0, 20));
   drawRoad();
-  // Create multiple vehicles with random properties
-  myCar.push(new Vehicle(0, 100, 200, "red", 1, 3));  // Car moving right
-  myCar.push(new Vehicle(1, 300, 300, "blue",0, 2)); // Truck moving left
-  myCar.push(new Vehicle(0, 500, 400, "green", 1, 4)); // Car moving right
-  myCar.push(new Vehicle(1, 700, 500, "yellow", 0, 2.5)); // Truck moving left
 
+  // Cars
+  for (let i = 0; i <= carAmount; i++) {
+
+    myCar.push(new Vehicle(round(random(0,1)), random(windowWidth), random(windowHeight / 2, windowHeight), "red", round(random(0,1)), random(0,5)));  // Car moving right
+   
+  }
 
   //   //                  type    x     y        color   direction   speed
   //   myCar = new Vehicle(1,     100,  500,     "red",    0,          2);
@@ -54,8 +57,8 @@ class Vehicle {
   constructor(type, x, y, color, direction, speed) {
     this.x = x;
     this.y = y;
-    this.carColor = random(255), random(255), random(255);
-    this.truckColor = random(255), random(255), random(255);
+    this.carColor = [random(255), random(255), random(255)];
+    this.truckColor = [random(255), random(255), random(255)];
     this.type = type;
     this.direction = direction;
     this.xSpeed = speed;
