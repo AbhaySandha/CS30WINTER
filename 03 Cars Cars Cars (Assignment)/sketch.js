@@ -4,19 +4,62 @@
 
 let myCar = [];
 let vehicles = [];
+let eastbound = [];
+let westbound = [];
+
+let lights;
+
 let carAmount;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  carAmount = int(random(0, 20));
+  carAmount = int(random(0, 50));
   drawRoad();
+  lights = new trafficLight(width / 2, height / 2 - 100);
 
   // Cars
-  for (let i = 0; i <= carAmount; i++) {
-
-    myCar.push(new Vehicle(round(random(0,1)), random(windowWidth), random(windowHeight / 2, windowHeight), "red", round(random(0,1)), random(0,5)));  // Car moving right
-   
+  // WestBound
+  for (let i = 0; i < 5; i++) {
+    let type = round(random(0, 1));
+    let x = round(random(windowWidth));
+    let y = round(random(windowHeight / 2)) - 60;
+    let color = random(255);
+    let direction = 0;
+    let xSpeed = random(0, 15);
+    westbound.push(new Vehicle(type, x, y, color, direction, xSpeed,));
   }
+  //EastBound
+  for (let i = 0; i < 5; i++) {
+    let type = round(random(0, 1));
+    let x = round(random(windowWidth));
+    let y = random(windowHeight / 2 + 20, windowHeight);
+    let color = random(255);
+    let direction = 1;
+    let xSpeed = random(0, 15);
+    eastbound.push(new Vehicle(type, x, y, color, direction, xSpeed,));
+  }
+
+
+  // for (let i = 0; i <= carAmount; i++) {
+  //   let type = round(random(0, 1));
+  //   let x = round(random(windowWidth));
+  //   let y = round(random(windowHeight / 2));
+  //   let color = random(255);
+  //   let direction = round(random(0, 1));
+  //   let xSpeed = random(0, 15);
+
+  //   if (direction === 0) {
+  //     y = y - 60;
+  //     myCar.push(new Vehicle(type, x, y, color, direction, xSpeed));  // up   
+  //   }
+
+  //   if (direction === 1) {
+  //     y = random(windowHeight / 2 + 10, windowHeight);
+  //     myCar.push(new Vehicle(type, x, y, color, direction, xSpeed));  // down
+  //   }
+
+
+  // }
 
   //   //                  type    x     y        color   direction   speed
   //   myCar = new Vehicle(1,     100,  500,     "red",    0,          2);
@@ -28,11 +71,79 @@ function draw() {
   background(220);
   drawRoad();
 
-  for (let i of myCar) {
-    i.update();
-    i.display();
+  lights.update();
+  lights.draw();
+  
+  showCars();
 
+
+  // for (let i of westbound) {
+  //   i.action();
+  // }
+
+  // for (let i of eastbound) {
+  //   i.action();
+  // }
+
+}
+
+function showCars(){
+  // SHow Cars 
+  for (let i of westbound) {
+    if (lights.red()) {
+      i.display(); 
+    } 
+    else {
+      i.action();  
+    }
   }
+  // Show eastbound Cars 
+  for (let i of eastbound) {
+    if (lights.red()) {
+      i.display(); 
+    } 
+    else {
+      i.action();
+    }
+  }
+
+
+}
+function mousePressed() {
+  let type = round(random(0, 1));
+  let x = round(random(windowWidth));
+  let y = round(random(windowHeight / 2)) - 60;
+  let color = random(255);
+  let direction = 0;
+  let xSpeed = random(0, 15);
+
+  // Spawn cars in westbound.
+  if (keyIsDown(SHIFT)) {
+    if (mouseButton === LEFT) {
+      westbound.push(new Vehicle(type, x, y, color, direction, xSpeed,));
+    }
+    // }
+    // // Spawn cars in eastbound.
+    // if (mouseButton === LEFT) {
+    //   let x = round(random(windowWidth));
+    //   let y = random(windowHeight / 2 + 20, windowHeight);
+    //   let color = random(255);
+    //   let direction = 1;
+    //   let xSpeed = random(0, 15);
+    //   eastbound.push(new Vehicle(type, x, y, color, direction, xSpeed));
+    // }
+  }
+  // Spaw cars in eastbound.
+  else if (mouseButton === LEFT) {
+    let x = round(random(windowWidth));
+    let y = random(windowHeight / 2 + 20, windowHeight);
+    let color = random(255);
+    let direction = 1;
+    let xSpeed = random(0, 15);
+    eastbound.push(new Vehicle(type, x, y, color, direction, xSpeed));
+  }
+
+
 
 }
 
@@ -57,11 +168,12 @@ class Vehicle {
   constructor(type, x, y, color, direction, speed) {
     this.x = x;
     this.y = y;
-    this.carColor = [random(255), random(255), random(255)];
-    this.truckColor = [random(255), random(255), random(255)];
     this.type = type;
     this.direction = direction;
     this.xSpeed = speed;
+    this.carColor = [random(255), random(255), random(255)];
+    this.truckColor = [random(255), random(255), random(255)];
+
   }
 
   display() {
@@ -96,10 +208,45 @@ class Vehicle {
 
     }
   }
+  changeColor() {
+    // Changes color
+
+    this.carColor = [random(255), random(255), random(255)];
+    this.truckColor = [random(255), random(255), random(255)];
+  }
+
+
+  speedUp() {
+    // Increaes speed to maximun of 15
+
+    if (this.xSpeed < 15) {
+      this.xSpeed += 0.1;
+    }
+    else {
+      this.xSpeed = 15;
+    }
+  }
+
+
+  speedDown() {
+    // Decreaes speed to minimun of 0
+
+    if (this.xSpeed <= 15) {
+      if (this.xSpeed > 0.1) {
+        this.xSpeed -= 0.1;
+      }
+      else {
+        this.xSpeed = 0;
+      }
+
+    }
+  }
+
 
   update() {
+    // console.log(this.xSpeed);
+
     // Direction
-    // Left
     if (this.direction === 0) {
       this.x -= this.xSpeed;   // left
     }
@@ -115,9 +262,82 @@ class Vehicle {
       this.x = width;
 
     }
+  }
+  action() {
+    this.update();
 
+    if (random(100) < 1) {    //Speeds up
+      this.speedUp();
+    }
+    // SpeedDown
+    if (random(100) < 1) {      // Speeds down
+      this.speedDown();
+    }
+
+    if (random(100) < 1) {
+      this.changeColor();   // Changes Color 
+    }
+
+    this.display();
   }
 }
+
+
+class trafficLight {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+    this.lightColor = "green";
+    this.time = 0;
+  }
+
+  draw() { 
+    // draw the traffic lights
+    
+    if (this.lightColor === "red") {
+      fill("red");
+    }
+    else {
+      fill("gray");
+    }
+    ellipse(this.x + 20, this.y + 25, 20);
+    if (this.lightColor === "green") {
+      fill("green");
+    }
+    else {
+      fill("gray");
+    }
+    ellipse(this.x + 20, this.y + 75, 20);
+  }
+
+  update() {
+
+    if (this.lightColor === "red") {
+      this.time--;
+      if (this.time <= 0) {
+        this.lightColor = "green";
+      }
+    }
+  }
+
+  redlight() {
+    this.lightColor = "red";
+    this.time = 120;
+  }
+
+  red() {
+    return this.lightColor === "red";
+  }
+
+}
+
+// Space for lights
+function keyPressed() {
+  if (keyCode === 32) {
+    lights.redlight();
+  }
+}
+
 
 
 
